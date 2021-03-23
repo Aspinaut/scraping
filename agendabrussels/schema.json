@@ -1,0 +1,211 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/ScrapingEvent:jsonld",
+    "definitions": {
+        "ScrapingEvent:jsonld": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ScrapingEventTag:jsonld"
+                    },
+                    "minItems": 1
+                },
+                "mediasPhotos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ScrapingEventMedia:jsonld"
+                    },
+                    "minItems": 1
+                },
+                "singleDate": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ScrapingEventDate:jsonld"
+                    },
+                    "maxItems": 1
+                },
+                "calendar": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ScrapingEventDate:jsonld"
+                    }
+                },
+                "dateInfo": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "descriptions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ScrapingEventDescription:jsonld"
+                    },
+                    "minItems": 1
+                },
+                "places": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ScrapingEventPlace:jsonld"
+                    },
+                    "minItems": 1,
+                    "maxItems": 1
+                },
+                "contacts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ScrapingEventContact:jsonld"
+                    },
+                    "maxItems": 1
+                },
+                "prices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ScrapingEventPrice:jsonld"
+                    }
+                },
+                "priceInfo": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "ignored": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "url",
+                "title",
+                "tags",
+                "descriptions",
+                "mediasPhotos",
+                "places"
+            ],
+            "additionalProperties": false
+        },
+        "ScrapingEventTag:jsonld": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ScrapingEventMedia:jsonld": {
+            "type": "object",
+            "required": [
+                "link"
+            ],
+            "properties": {
+                "link": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ScrapingEventDate:jsonld": {
+            "type": "object",
+            "required": [
+                "startDate"
+            ],
+            "properties": {
+                "startDate": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "startTime": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "endTime": {
+                    "type": "string",
+                    "nullable": true
+                }
+            },
+            "additionalProperties": false
+        },
+        "ScrapingEventDescription:jsonld": {
+            "type": "object",
+            "required": [
+                "description"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ScrapingEventPlace:jsonld": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "address": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "addressShort": {
+                    "type": "string",
+                    "nullable": true
+                }
+            },
+            "additionalProperties": false
+        },
+        "ScrapingEventContact:jsonld": {
+            "type": "object",
+            "properties": {
+                "website": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "email": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "phone": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "facebook": {
+                    "type": "string",
+                    "nullable": true
+                }
+            },
+            "additionalProperties": false
+        },
+        "ScrapingEventPrice:jsonld": {
+            "type": "object",
+            "required": [
+                "category",
+                "value",
+                "currency"
+            ],
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        }
+    }
+}
