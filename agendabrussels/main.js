@@ -12,10 +12,22 @@ function setIgnored(api_event) {
   if (!(api_event.categories.main) && !(api_event.categories.others)) {
     is_ignored = true;
   }
-  if (!(api_event.media)) {
+  let only_youtube_media = true;
+  if (Array.isArray(api_event.media)) {
+    api_event.media.forEach((photo) => {
+      if (photo.link.match(/(png)|(jpg)|(jpeg)$/)){
+        only_youtube_media = false;
+      }
+    });
+  } else if (api_event.media) {
+    if (api_event.media.link.match(/(png)|(jpg)|(jpeg)$/)){
+      only_youtube_media = false;
+    }
+  }
+  if (!(api_event.media) || only_youtube_media === true) {
     is_ignored = true;
   }
-  if (!(api_event.translations.fr.longdescr) && !(api_event.translations.fr.longdescr)) {
+  if (!(api_event.translations.fr.shortdescr) && !(api_event.translations.fr.longdescr)) {
     is_ignored = true;
   }
   if (!(api_event.dates)) {
@@ -31,9 +43,11 @@ function createTagsArray(event_categories) {
     const other_tags = event_categories.others.translations.fr;
     if (Array.isArray(other_tags)) {
       other_tags.forEach((tag) => {
-        tags.push({ name: tag });
+        if (tag !== event_categories.main.translations.fr) {
+          tags.push({ name: tag });
+        }
       });
-    } else {
+    } else if (other_tags !== event_categories.main.translations.fr) {
       tags.push({ name: other_tags });
     }
   }
@@ -45,10 +59,14 @@ function createMediasPhotosArray(event_medias) {
   if (event_medias) {
     if (Array.isArray(event_medias)){
       event_medias.forEach((photo) => {
-        mediasPhotos.push({ link: photo.link});
+        if (photo.link.match(/(png)|(jpg)|(jpeg)$/)) {
+          mediasPhotos.push({ link: photo.link});
+        }
       });
     } else {
-      mediasPhotos.push({ link: event_medias.link});
+      if (event_medias.link.match(/(png)|(jpg)|(jpeg)$/)) {
+        mediasPhotos.push({ link: event_medias.link});
+      }
     }
   }
   return mediasPhotos;
@@ -83,19 +101,34 @@ function createDateArrays(event_dates) {
   return {singleDate, calendar};
 }
 
-function createDescriptionsArray(event_descriptions) {
+function createDescriptionsArray(event_descriptions, event_accessibilities) {
   let descriptions = [];
 
   if (event_descriptions.fr) {
-    if (event_descriptions.fr.shortdescr !== null) {
-      descriptions.push(
-        { description: event_descriptions.fr.shortdescr }
-      );
-    }
     if (event_descriptions.fr.longdescr !== null) {
       descriptions.push(
         { description: event_descriptions.fr.longdescr }
       );
+    } else if (event_descriptions.fr.shortdescr !== null) {
+      descriptions.push(
+        { description: event_descriptions.fr.shortdescr }
+      );
+    }
+  }
+  if (event_accessibilities) {
+    let accessibilities = event_accessibilities.translations.fr;
+    if (event_accessibilities.translations.fr){
+      if (Array.isArray(accessibilities)) {
+        accessibilities.forEach((accessibility) => {
+          descriptions.push(
+            { description: accessibility }
+          );
+        });
+      } else {
+        descriptions.push(
+          { description: accessibilities }
+        );
+      }
     }
   }
   return descriptions;
@@ -135,7 +168,7 @@ function insertFieldsToParsehubEvents(events) {
       const tags = createTagsArray(api_event.categories);
       const mediasPhotos = createMediasPhotosArray(api_event.media);
       const dates = createDateArrays(api_event.dates);
-      const descriptions = createDescriptionsArray(api_event.translations);
+      const descriptions = createDescriptionsArray(api_event.translations, api_event.accessibilities);
       const prices = createPricesArray(api_event.prices);
       let priceInfo;
 
@@ -218,7 +251,7 @@ async function getAndTransformEventsFromAPI(token) {
     try {
       const res = await axios(`https://api.brussels:443/api/agenda/0.0.1/events?page=${i}`, options);
       let events = res.data.response.results.event;
-      // fs.writeFile('parsehub_events.json', JSON.stringify(events));
+      // fs.writeFile('api_events.json', JSON.stringify(events));
 
       if (i === 1) {
         pageCount = res.data.response.pageCount;
