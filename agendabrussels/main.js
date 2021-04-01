@@ -9,9 +9,6 @@ const countryCode = "BE";
 function setIgnored(api_event) {
   let is_ignored = false;
 
-  if (!(api_event.translations.en.name)) {
-    is_ignored = true;
-  }
   if (!(api_event.categories.main) && !(api_event.categories.others)) {
     is_ignored = true;
   }
@@ -29,9 +26,9 @@ function setIgnored(api_event) {
 
 function createTagsArray(event_categories) {
   const tags = [];
-  tags.push({ name: event_categories.main.translations.en });
+  tags.push({ name: event_categories.main.translations.fr });
   if (event_categories.others !== null) {
-    const other_tags = event_categories.others.translations.en;
+    const other_tags = event_categories.others.translations.fr;
     if (Array.isArray(other_tags)) {
       other_tags.forEach((tag) => {
         tags.push({ name: tag });
@@ -89,15 +86,15 @@ function createDateArrays(event_dates) {
 function createDescriptionsArray(event_descriptions) {
   let descriptions = [];
 
-  if (event_descriptions.en) {
-    if (event_descriptions.en.shortdescr !== null) {
+  if (event_descriptions.fr) {
+    if (event_descriptions.fr.shortdescr !== null) {
       descriptions.push(
-        { description: event_descriptions.en.shortdescr }
+        { description: event_descriptions.fr.shortdescr }
       );
     }
-    if (event_descriptions.en.longdescr !== null) {
+    if (event_descriptions.fr.longdescr !== null) {
       descriptions.push(
-        { description: event_descriptions.en.longdescr }
+        { description: event_descriptions.fr.longdescr }
       );
     }
   }
@@ -109,11 +106,10 @@ function createPricesArray(event_prices) {
 
   if (event_prices) {
     if (Array.isArray(event_prices)) {
-      // console.log(event_prices)
       event_prices.forEach((price) => {
         prices.push(
           {
-            category: price.translations.en.name,
+            category: price.translations.fr.name,
             value: price.value,
             currency: "€"
           }
@@ -122,7 +118,7 @@ function createPricesArray(event_prices) {
     } else {
       prices.push(
         {
-          category: event_prices.translations.en.name,
+          category: event_prices.translations.fr.name,
           value: event_prices.value,
           currency: "€"
         }
@@ -144,31 +140,31 @@ function insertFieldsToParsehubEvents(events) {
       let priceInfo;
 
       if (api_event.is_free === true) {
-        priceInfo = "Free";
-        tags.push({name: "Free"});
+        priceInfo = "Gratuit";
+        tags.push({name: "Gratuit"});
       }
       return (
         {
-          url: api_event.translations.en.agenda_url,
-          title: api_event.translations.en.name,
+          url: api_event.translations.fr.agenda_url,
+          title: api_event.translations.fr.name,
           tags: tags,
           mediasPhotos: mediasPhotos,
           singleDate: dates.singleDate,
           calendar: dates.calendar,
-          dateInfo: `From ${ api_event.date_start } to ${ api_event.date_end }`,
+          dateInfo: `Du ${ api_event.date_start } au ${ api_event.date_end }`,
           descriptions: descriptions,
           places: [
             {
-              name: api_event.place.translations.en.name,
-              address: `${api_event.place.translations.en.address_line1} ${api_event.place.translations.en.address_line2}`,
-              addressShort: api_event.place.translations.en.address_line2
+              name: api_event.place.translations.fr.name,
+              address: `${api_event.place.translations.fr.address_line1} ${api_event.place.translations.fr.address_line2}`,
+              addressShort: api_event.place.translations.fr.address_line2
             }
           ],
           contacts: [
             {
-              website: api_event.translations.en.website,
-              email: api_event.translations.en.email,
-              phone: api_event.translations.en.phone_contact,
+              website: api_event.translations.fr.website,
+              email: api_event.translations.fr.email,
+              phone: api_event.translations.fr.phone_contact,
               facebook: api_event.facebook_link
             }
           ],
