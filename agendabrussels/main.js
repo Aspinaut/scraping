@@ -72,10 +72,16 @@ function createMediasPhotosArray(event_medias) {
   return mediasPhotos;
 }
 
-function createDateArrays(event_dates) {
+function createDateArrays(event_dates, event_date_start, event_date_end, event_categories) {
   let singleDate = [];
   let calendar = [];
-  if (event_dates){
+  let dateInfo;
+
+  if ((event_date_start !== null) && (event_date_end !== null)) {
+    dateInfo = `Du ${ event_date_start } au ${ event_date_end }`;
+  }
+
+  if (event_dates && !(event_categories.main.translations.fr.match(/(Exposition)|(Animation)|(Visites)|(Musée)/))) {
     if (event_dates.length === 1){
       singleDate.push(
         {
@@ -98,7 +104,7 @@ function createDateArrays(event_dates) {
       });
     }
   }
-  return {singleDate, calendar};
+  return {singleDate, calendar, dateInfo};
 }
 
 function createDescriptionsArray(event_descriptions, event_accessibilities) {
@@ -167,7 +173,7 @@ function insertFieldsToParsehubEvents(events) {
     if (!(is_ignored)) {
       const tags = createTagsArray(api_event.categories);
       const mediasPhotos = createMediasPhotosArray(api_event.media);
-      const dates = createDateArrays(api_event.dates);
+      const dates = createDateArrays(api_event.dates, api_event.date_start, api_event.date_end, api_event.categories);
       const descriptions = createDescriptionsArray(api_event.translations, api_event.accessibilities);
       const prices = createPricesArray(api_event.prices);
       let priceInfo;
@@ -184,7 +190,7 @@ function insertFieldsToParsehubEvents(events) {
           mediasPhotos: mediasPhotos,
           singleDate: dates.singleDate,
           calendar: dates.calendar,
-          dateInfo: `Du ${ api_event.date_start } au ${ api_event.date_end }`,
+          dateInfo: dates.dateInfo,
           descriptions: descriptions,
           places: [
             {

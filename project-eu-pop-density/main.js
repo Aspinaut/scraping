@@ -5,7 +5,6 @@ const server = express()
 // const html = require('./index.html')
 require('dotenv').config()
 
-
 // const loader = new Loader({
 //   apiKey: process.env.API_KEY,
 //   version: "weekly",
@@ -43,7 +42,7 @@ server.get('/', (req, res) => {
 
           function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
-              center: { lat: -34.397, lng: 150.644 },
+              center: { lat: -340.397, lng: 1500.644 },
               zoom: 8,
             });
           }
@@ -54,7 +53,7 @@ server.get('/', (req, res) => {
 
         <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
         <script
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHWSkU8sg7sAALFLOvCB0nzOt1VPM8zW4&callback=initMap&libraries=&v=weekly"
+          src="https://maps.googleapis.com/maps/api/js?key=${process.env.API_KEY}&callback=initMap&libraries=&v=weekly"
           async
         ></script>
       </body>
