@@ -21,7 +21,7 @@ const fs = require('fs').promises
 // nuts 0 (countries)
 
 let newMap = geojson.features.map((country) => {
-  let countryDensity = density.find(el => el["NUTS_0"] === country.properties.postal)
+  let countryDensity = density.find(el => el["NUTS_0"] === country.properties.fips_10)
   if (countryDensity) {
     country.properties.density = countryDensity["2020"]
     country.properties.events = 0
@@ -29,4 +29,4 @@ let newMap = geojson.features.map((country) => {
   return country
 })
 
-fs.writeFile(`./tmp/nuts${level}_final.json`, JSON.stringify(newMap))
+fs.writeFile(`./scripts/nuts${level}_final.json`, JSON.stringify(newMap))
