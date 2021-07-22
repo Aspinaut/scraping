@@ -1,22 +1,20 @@
-{
-    [
-        culturius: {
-            email: "",
-            address: "Rue Dries 165, St-Lambrechts-Woluwe, Brussels Region 1200, BE",
-            name: "Culturius",
-            website: "https://culturius.com",
-        },
-        framasoft: {
-            email: "",
-            address: "Lyon, France",
-            name: "Framasoft",
-            website: "https://framasoft.org/fr/",
-        },
-        randomEnterprise: {
-            email: "random@doesntexist.com",
-            address: "Nowhere",
-            name: "",
-            website: "",
-        },
-    ]
-}
+[
+    {
+        "email": "null",
+        "address": "Rue Dries 165, St-Lambrechts-Woluwe, Brussels Region 1200, BE",
+        "name": "Culturius",
+        "website": "https://culturius.com"
+    },
+    {
+        "email": "null",
+        "address": "Lyon, France",
+        "name": "Framasoft",
+        "website": "https://framasoft.org/fr/"
+    },
+    {
+        "email": "random@doesntexist.com",
+        "address": "Nowhere",
+        "name": null,
+        "website": null
+    }
+]
